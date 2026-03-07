@@ -19,44 +19,28 @@ export class CanvasLocal {
         this.graphics.stroke();
     }
 
-    paint() {
-    let side = Math.min(this.maxX, this.maxY) * 0.8;
-    let offset = (this.maxX - side) / 2;
-    
-    // 1. Vértices del cuadrado inicial
-    let xA = offset,        yA = offset;
-    let xB = offset + side, yB = offset;
-    let xC = offset + side, yC = offset + side;
-    let xD = offset,        yD = offset + side;
+   paint() {
 
-    let q = 0.05; // Factor de desplazamiento
-    let p = 1 - q;
+    let radius = Math.min(this.maxX, this.maxY) * 0.4;
+    let centerX = this.centerX;
+    let centerY = this.centerY;
 
-    for (let i = 0; i < 10; i++) {
-        // 2. Dibujar las 4 líneas del cuadrado actual
-        this.drawLine(xA, yA, xB, yB);
-        this.drawLine(xB, yB, xC, yC);
-        this.drawLine(xC, yC, xD, yD);
-        this.drawLine(xD, yD, xA, yA);
+    // Dibujar el círculo
+    this.graphics.beginPath();
+    this.graphics.arc(centerX, centerY, radius, 0, Math.PI * 2);
+    this.graphics.stroke();
 
-        // 3. Calcular nuevos vértices (Interpolación lineal)
-        let xA1 = p * xA + q * xB;
-        let yA1 = p * yA + q * yB;
-        
-        let xB1 = p * xB + q * xC;
-        let yB1 = p * yB + q * yC;
-        
-        let xC1 = p * xC + q * xD;
-        let yC1 = p * yC + q * yD;
-        
-        let xD1 = p * xD + q * xA;
-        let yD1 = p * yD + q * yA;
+    // Número de líneas
+    let lines = 40;
 
-        // Actualizar para la siguiente vuelta
-        xA = xA1; yA = yA1;
-        xB = xB1; yB = yB1;
-        xC = xC1; yC = yC1;
-        xD = xD1; yD = yD1;
+    for (let i = 0; i < lines; i++) {
+
+        let angle = (2 * Math.PI / lines) * i;
+
+        let x = centerX + radius * Math.cos(angle);
+        let y = centerY + radius * Math.sin(angle);
+
+        this.drawLine(centerX, centerY, x, y);
     }
 }
 }
